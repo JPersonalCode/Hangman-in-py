@@ -27,19 +27,28 @@ def Validate_Guess(Guess):
     else :
         return True
 def Compare_Guess(Word, Guess):
+    Correct_Guess = 0
     for Letter in Word:
-        if Guess.upper() == Letter:
-            Word_Array.append(Letter)
-            print(Letter)
+        if Guess.upper() == Letter.upper():
             Player_Guess_Array.append(Letter)
-            return True
-    print(Letter)    
+            Correct_Guess += 1 
     Player_Guess_Array.append(Guess)
-    return False
+    if Correct_Guess !=0:
+        return True
+    else:
+        return False
+    
 def Check_if_Word_Has_Been_Guessed(Word_Array):
+    Correct_Letters = 0
     for Letter in Word_Array:
-        if Letter == "_":
-            return False
+        if Letter != "_":
+            Correct_Letters +=1
+    if Correct_Letters == len(Word_Array):
+        return True
+    else:
+        return False
+
+        
 def Check_Lives(Lives):
     if Lives == 0:
         print ("You Lose")
@@ -61,12 +70,16 @@ def Write_Word(Word):
 Current_Word = Set_Word()
 Validate_Word()
 Player_Lives = len(Current_Word)
-Write_Word(Current_Word)
+Word_Array = Write_Word(Current_Word)
 
 # Main Loop
-while Check_if_Word_Has_Been_Guessed(Word_Array) is False:
+while True:
+#Check to See if Player has won
+    if Check_if_Word_Has_Been_Guessed(Word_Array)is True:
+        print("You Win!")
+        print("The Word Was "+str(Current_Word))
+        break
     print(Word_Array)
-    print(Current_Word)
     print("Guessed Letter: "+str(Player_Guess_Array))
     print ("Current Word has " + str(len(Current_Word)) + " Letters")
     print ("Current Lives: " + str(Player_Lives))
@@ -77,10 +90,15 @@ while Check_if_Word_Has_Been_Guessed(Word_Array) is False:
         print ("Sorry That is not a Valid Letter")
         Player_Guess = input("Please Make a Guess: ")
         Validate_Guess(Player_Guess)
+# Check if Guess is Correct
     if Compare_Guess(Current_Word,Player_Guess) is True:
         print("You Guessed a Letter Correctly")
     else:
         print("You Guessed Incorrectly")
         Player_Lives -= 1
+# Final Checks
     Check_Lives(Player_Lives)
+    Word_Array = Write_Word(Current_Word)
     
+    
+   
